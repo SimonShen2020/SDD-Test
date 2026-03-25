@@ -1,0 +1,13 @@
+{
+  "name": "md-to-pdf-converter",
+  "version": "1.0.0",
+  "description": "Convert Markdown to PDF with Mermaid support",
+  "main": "convert.js",
+  "scripts": {
+    "convert": "node convert.js"
+  },
+  "dependencies": {
+    "markdown-it": "^14.0.0",
+    "puppeteer": "^22.0.0"
+  }
+}

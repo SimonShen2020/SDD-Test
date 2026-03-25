@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cameraConfig version="1.0">
+  <vendorType>null</vendorType>
+  <layout rows="3" cols="8"/>
+  <cameras>
+    <camera userId="DHAA0" deviceId="null-00" row="0" col="0"/>
+    <camera userId="DHAA1" deviceId="null-01" row="0" col="1"/>
+    <camera userId="DHAA2" deviceId="null-02" row="0" col="2"/>
+    <camera userId="DHAA3" deviceId="null-03" row="0" col="3"/>
+    <camera userId="DHAA4" deviceId="null-04" row="0" col="4"/>
+    <camera userId="DHAA5" deviceId="null-05" row="0" col="5"/>
+    <camera userId="DHAA6" deviceId="null-06" row="0" col="6"/>
+    <camera userId="DHAA7" deviceId="null-07" row="0" col="7"/>
+
+    <camera userId="DHAB0" deviceId="null-08" row="1" col="0"/>
+    <camera userId="DHAB1" deviceId="null-09" row="1" col="1"/>
+    <camera userId="DHAB2" deviceId="null-10" row="1" col="2"/>
+    <camera userId="DHAB3" deviceId="null-11" row="1" col="3"/>
+    <camera userId="DHAB4" deviceId="null-12" row="1" col="4"/>
+    <camera userId="DHAB5" deviceId="null-13" row="1" col="5"/>
+    <camera userId="DHAB6" deviceId="null-14" row="1" col="6"/>
+    <camera userId="DHAB7" deviceId="null-15" row="1" col="7"/>
+
+    <camera userId="DHAC0" deviceId="null-16" row="2" col="0"/>
+    <camera userId="DHAC1" deviceId="null-17" row="2" col="1"/>
+    <camera userId="DHAC2" deviceId="null-18" row="2" col="2"/>
+    <camera userId="DHAC3" deviceId="null-19" row="2" col="3"/>
+    <camera userId="DHAC4" deviceId="null-20" row="2" col="4"/>
+    <camera userId="DHAC5" deviceId="null-21" row="2" col="5"/>
+    <camera userId="DHAC6" deviceId="null-22" row="2" col="6"/>
+    <camera userId="DHAC7" deviceId="null-23" row="2" col="7"/>
+  </cameras>
+</cameraConfig>
