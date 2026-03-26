@@ -1,0 +1,8 @@
+{
+  "layout": { "rows": 1, "cols": 2 },
+  "vendor": "Null",
+  "cameras": [
+    { "name": "A", "row": 0, "col": 0, "serialNumber": "SN-A" },
+    { "name": "B", "row": 0, "col": 1, "serialNumber": "SN-B" }
+  ]
+}

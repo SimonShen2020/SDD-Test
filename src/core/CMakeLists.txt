@@ -1,55 +1,43 @@
 add_library(CameraCore SHARED
-    src/CameraCoreStub.cpp
-    src/CameraBase.cpp
-    src/CameraFactory.cpp
-    src/PluginLoader.cpp
-    src/CameraRuntime.cpp
-    src/CameraLayout.cpp
-    src/CameraConfigParser.cpp
-    src/CameraMonitor.cpp
-    src/CoreResult.cpp
-    src/CameraService.cpp
-    src/CameraServiceAlgorithms.cpp
+    ICamera.h
+    CameraFactory.h
+    CameraFactory.cpp
+    CameraGroup.h
+    CameraGroup.cpp
+    CameraBase.h
+    CameraBase.cpp
+    CameraService.h
+    CameraService.cpp
+    Log.h
 )
 
-add_library(CameraSDD::CameraCore ALIAS CameraCore)
-
-target_include_directories(CameraCore
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+target_include_directories(CameraCore PUBLIC 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..> 
+    $<INSTALL_INTERFACE:include>
 )
 
-# Ensure TinyXML-2 is available
-camera_ensure_tinyxml2()
+target_link_libraries(CameraCore PRIVATE nlohmann_json)
 
-target_link_libraries(CameraCore
-    PUBLIC
-        CameraSDD::CameraCommon
-    PRIVATE
-        tinyxml2::tinyxml2
-)
-
-if(CMAKE_DL_LIBS)
-    target_link_libraries(CameraCore PRIVATE ${CMAKE_DL_LIBS})
+# Handle symbol visibility
+if(WIN32)
+    target_compile_definitions(CameraCore PUBLIC "CAM_API_EXPORT")
+else()
+    # For other platforms, you might need different visibility settings
 endif()
 
-camera_apply_default_compiler_options(CameraCore)
-camera_enable_sanitizers(CameraCore)
-
-set_target_properties(CameraCore PROPERTIES
-    OUTPUT_NAME "CameraCore"
-    WINDOWS_EXPORT_ALL_SYMBOLS ON
-)
-
 install(TARGETS CameraCore
-    EXPORT CameraSDDTargets
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    EXPORT CameraCoreTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+install(EXPORT CameraCoreTargets
+    FILE CameraCoreTargets.cmake
+    NAMESPACE cam::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/CameraCore
 )
+
+set_target_properties(CameraCore PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+

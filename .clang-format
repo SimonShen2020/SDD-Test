@@ -23,7 +23,7 @@ TabWidth: 4                                      # Tab字符宽度为4
 Standard: c++17                                  # 采用C++17标准
 SortIncludes: false                              # 禁止对头文件排序
 PenaltyBreakBeforeFirstCallParameter: 9000       # 调用参数首行换行惩罚值（极大，尽量不换行）
-WrapNamespaceBodyWithEmptyLines: Leave           # 命名空间体包裹空行保持原样
+# WrapNamespaceBodyWithEmptyLines: Leave           # 命名空间体包裹空行保持原样
 NamespaceIndentation: All                        # 命名空间内的代码整体缩进
 DerivePointerAlignment: false                    # 不自动推导指针对齐方式
 PointerAlignment: Left                           # 指针符号*靠左（紧贴类型）

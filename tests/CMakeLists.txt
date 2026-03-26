@@ -1,40 +1,27 @@
-camera_ensure_gtest()
-
-add_executable(camera_core_tests
-    unit/test_placeholder.cpp
-    unit/test_factory_registration.cpp
-    unit/test_camera_layout.cpp
-    integration/test_plugin_loading.cpp
-    integration/test_3x8_xml_config.cpp
-    unit/test_error_semantics.cpp
-    integration/test_null_capture_flow.cpp
-    integration/test_null_reconnect_policy.cpp
-    integration/test_huarui_minimal_flow.cpp
-    unit/test_service_contracts.cpp
-    integration/test_cross_platform_build.cpp
+﻿add_executable(cameratest
+    factory_test.cpp
+    service_layout_test.cpp
+    service_call_test.cpp
+    camera_group_test.cpp
+    service_failure_test.cpp
+    e2e_integration_test.cpp
 )
 
-target_compile_definitions(camera_core_tests
-    PRIVATE
-        CAMERA_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
-    CAMERA_NULL_PLUGIN_PATH="$<TARGET_FILE:CameraNull>"
-    CAMERA_HUARUI_PLUGIN_PATH="$<TARGET_FILE:CameraHuarui>"
-)
-
-add_custom_command(TARGET camera_core_tests POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:CameraCore>
-        $<TARGET_FILE_DIR:camera_core_tests>
-)
-
-target_link_libraries(camera_core_tests
-    PRIVATE
-    CameraSDD::CameraCore
-        GTest::gtest_main
-)
-
-camera_apply_default_compiler_options(camera_core_tests)
-camera_enable_sanitizers(camera_core_tests)
-
+target_link_libraries(cameratest PRIVATE GTest::gtest_main CameraCore CameraNull)
 include(GoogleTest)
-gtest_discover_tests(camera_core_tests DISCOVERY_MODE PRE_TEST)
+gtest_discover_tests(cameratest)
+
+if(WIN32)
+    add_custom_command(TARGET cameratest POST_BUILD
+        COMMAND  -E copy_if_different
+        \$<TARGET_FILE:CameraCore>
+        \$<TARGET_FILE_DIR:cameratest>
+    )
+    add_custom_command(TARGET cameratest POST_BUILD
+        COMMAND  -E copy_if_different
+        \$<TARGET_FILE:CameraNull>
+        \$<TARGET_FILE_DIR:cameratest>
+    )
+endif()
+gtest_discover_tests(cameratest)
+
