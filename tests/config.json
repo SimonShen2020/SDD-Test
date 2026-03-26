@@ -1,0 +1,11 @@
+{
+  "layout": { "rows": 2, "cols": 2 },
+  "vendor": "Null",
+  "cameras": [
+    { "name": "cam00", "row": 0, "col": 0, "serialNumber": "SN000" },
+    { "name": "cam01", "row": 0, "col": 1, "serialNumber": "SN001" },
+    { "name": "cam10", "row": 1, "col": 0, "serialNumber": "SN010" },
+    { "name": "cam11", "row": 1, "col": 1, "serialNumber": "SN011" }
+  ],
+  "reconnect": { "intervalSeconds": 5, "maxRetries": 10 }
+}
