@@ -20,9 +20,14 @@ target_include_directories(CameraCore
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
+# Ensure TinyXML-2 is available
+camera_ensure_tinyxml2()
+
 target_link_libraries(CameraCore
     PUBLIC
         CameraSDD::CameraCommon
+    PRIVATE
+        tinyxml2::tinyxml2
 )
 
 if(CMAKE_DL_LIBS)
