@@ -11,7 +11,7 @@ namespace camera
 
         CoreResult CameraBase::Initialize()
         {
-            const bool wasInitialized = initialized_.exchange(true);
+            const bool wasInitialized = m_initialized.exchange(true);
             if (wasInitialized)
             {
                 return CoreResult::Success();
@@ -20,14 +20,14 @@ namespace camera
             CoreResult result = DoInitialize();
             if (!result.ok())
             {
-                initialized_.store(false);
+                m_initialized.store(false);
             }
             return result;
         }
 
         CoreResult CameraBase::Shutdown()
         {
-            const bool wasInitialized = initialized_.exchange(false);
+            const bool wasInitialized = m_initialized.exchange(false);
             if (!wasInitialized)
             {
                 return CoreResult::Success();

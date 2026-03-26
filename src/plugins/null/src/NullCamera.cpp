@@ -13,7 +13,7 @@ namespace camera
 
         NullCamera::NullCamera()
         {
-            parameters_["exposure_mode"] = "auto";
+            m_parameters["exposure_mode"] = "auto";
         }
 
         core::CoreResult NullCamera::Capture(core::FrameData* outFrame)
@@ -23,11 +23,12 @@ namespace camera
                 return core::CoreResult::Failure(core::CoreErrorCode::kInvalidArgument, "outFrame is null");
             }
 
-            const unsigned int frameId = ++frameCounter_;
-            outFrame->width = 8;
-            outFrame->height = 8;
+            const unsigned int frameId = ++m_frameCounter;
+            outFrame->width = kNullCameraWidth;
+            outFrame->height = kNullCameraHeight;
             outFrame->pixelFormat = "GRAY8";
-            outFrame->bytes.assign(outFrame->width * outFrame->height, static_cast<std::uint8_t>(frameId % 255));
+            outFrame->bytes.assign(outFrame->width * outFrame->height,
+                static_cast<std::uint8_t>(frameId % kNullCameraPixelMaxValue));
             outFrame->timestampNs =
                 static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch()).count());
 
@@ -41,8 +42,8 @@ namespace camera
                 return core::CoreResult::Failure(core::CoreErrorCode::kInvalidArgument, "key is empty");
             }
 
-            std::lock_guard<std::mutex> lock(mutex_);
-            parameters_[key] = value;
+            std::lock_guard<std::mutex> lock(m_mutex);
+            m_parameters[key] = value;
             return core::CoreResult::Success();
         }
 
@@ -53,9 +54,9 @@ namespace camera
                 return core::CoreResult::Failure(core::CoreErrorCode::kInvalidArgument, "outValue is null");
             }
 
-            std::lock_guard<std::mutex> lock(mutex_);
-            const auto it = parameters_.find(key);
-            if (it == parameters_.end())
+            std::lock_guard<std::mutex> lock(m_mutex);
+            const auto it = m_parameters.find(key);
+            if (it == m_parameters.end())
             {
                 return core::CoreResult::Failure(core::CoreErrorCode::kNotFound, "parameter is not found");
             }

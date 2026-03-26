@@ -22,14 +22,14 @@ namespace camera
                 return CoreResult::Failure(CoreErrorCode::kInvalidArgument, "invalid factory register input");
             }
 
-            std::lock_guard<std::mutex> lock(mutex_);
-            const auto it = creators_.find(vendorType);
-            if (it != creators_.end())
+            std::lock_guard<std::mutex> lock(m_mutex);
+            const auto it = m_creators.find(vendorType);
+            if (it != m_creators.end())
             {
                 return CoreResult::Failure(CoreErrorCode::kAlreadyExists, "vendor type already registered");
             }
 
-            creators_.emplace(vendorType, std::move(creator));
+            m_creators.emplace(vendorType, std::move(creator));
             return CoreResult::Success();
         }
 
@@ -40,9 +40,9 @@ namespace camera
                 return CoreResult::Failure(CoreErrorCode::kInvalidArgument, "outCamera is null");
             }
 
-            std::lock_guard<std::mutex> lock(mutex_);
-            const auto it = creators_.find(vendorType);
-            if (it == creators_.end())
+            std::lock_guard<std::mutex> lock(m_mutex);
+            const auto it = m_creators.find(vendorType);
+            if (it == m_creators.end())
             {
                 return CoreResult::Failure(CoreErrorCode::kNotFound, "vendor type is not registered");
             }

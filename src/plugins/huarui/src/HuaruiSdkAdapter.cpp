@@ -25,10 +25,10 @@ namespace camera
             {
                 return core::CoreResult::Failure(core::CoreErrorCode::kInvalidArgument, "outFrame is null");
             }
-            outFrame->width = 4;
-            outFrame->height = 4;
+            outFrame->width = kHuaruiSimulatedWidth;
+            outFrame->height = kHuaruiSimulatedHeight;
             outFrame->pixelFormat = "GRAY8";
-            outFrame->bytes.assign(16, 128);
+            outFrame->bytes.assign(kHuaruiSimulatedPixelCount, kHuaruiSimulatedPixelValue);
             return core::CoreResult::Success();
         }
 

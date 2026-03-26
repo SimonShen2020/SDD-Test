@@ -23,7 +23,7 @@ namespace camera
             std::vector<std::string> ListUserIds() const override;
 
         private:
-            std::unordered_map<std::string, std::shared_ptr<core::ICamera>> cameras_;
+            std::unordered_map<std::string, std::shared_ptr<core::ICamera>> m_cameras;
         };
 
     } // namespace plugin_null

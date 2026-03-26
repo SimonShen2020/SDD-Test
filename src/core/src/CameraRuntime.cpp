@@ -23,8 +23,8 @@ namespace camera
                 return result;
             }
 
-            loadedPlugins_ = loadedCount;
-            CAMERA_LOG_INFO("plugins initialized: " + std::to_string(loadedPlugins_));
+            m_loadedPlugins = loadedCount;
+            CAMERA_LOG_INFO("plugins initialized: " + std::to_string(m_loadedPlugins));
             return CoreResult::Success();
         }
 

@@ -13,19 +13,19 @@ namespace camera
 
         NullCameraGroup::NullCameraGroup()
         {
-            cameras_.emplace("DHAA0", std::make_shared<NullCamera>());
-            cameras_.emplace("DHAA1", std::make_shared<NullCamera>());
+            m_cameras.emplace("DHAA0", std::make_shared<NullCamera>());
+            m_cameras.emplace("DHAA1", std::make_shared<NullCamera>());
         }
 
         std::size_t NullCameraGroup::Size() const
         {
-            return cameras_.size();
+            return m_cameras.size();
         }
 
         std::shared_ptr<core::ICamera> NullCameraGroup::GetByUserId(const std::string& userId) const
         {
-            const auto it = cameras_.find(userId);
-            if (it == cameras_.end())
+            const auto it = m_cameras.find(userId);
+            if (it == m_cameras.end())
             {
                 return {};
             }
@@ -35,8 +35,8 @@ namespace camera
         std::vector<std::string> NullCameraGroup::ListUserIds() const
         {
             std::vector<std::string> ids;
-            ids.reserve(cameras_.size());
-            for (const auto& item : cameras_)
+            ids.reserve(m_cameras.size());
+            for (const auto& item : m_cameras)
             {
                 ids.push_back(item.first);
             }

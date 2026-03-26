@@ -17,6 +17,8 @@ add_executable(camera_core_tests
 target_compile_definitions(camera_core_tests
     PRIVATE
         CAMERA_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+    CAMERA_NULL_PLUGIN_PATH="$<TARGET_FILE:CameraNull>"
+    CAMERA_HUARUI_PLUGIN_PATH="$<TARGET_FILE:CameraHuarui>"
 )
 
 add_custom_command(TARGET camera_core_tests POST_BUILD
@@ -27,7 +29,7 @@ add_custom_command(TARGET camera_core_tests POST_BUILD
 
 target_link_libraries(camera_core_tests
     PRIVATE
-        CameraCore
+    CameraSDD::CameraCore
         GTest::gtest_main
 )
 

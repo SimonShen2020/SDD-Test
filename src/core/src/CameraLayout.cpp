@@ -13,31 +13,11 @@ namespace camera
 
         namespace
         {
-            /**
-             * @brief 将二维行列坐标编码为 64 位整数键值
-             *
-             * 编码方式：高 32 位存储 row，低 32 位存储 col
-             * 用于在 unordered_map 中快速定位相机位置
-             *
-             * @param row 行索引
-             * @param col 列索引
-             * @return 64 位编码键值
-             */
             long long PositionKey(int row, int col)
             {
                 return (static_cast<long long>(row) << 32) | static_cast<unsigned int>(col);
             }
 
-            /**
-             * @brief 验证 userId 是否符合命名规范
-             *
-             * 命名规则：2-6 个大写字母 + 1 个大写字母 + 1 个或多个数字
-             * 有效示例：DHAA0, CAM001, ABCD123
-             * 无效示例：dh001, A1, ABC
-             *
-             * @param userId 用户标识符
-             * @return true 如果符合命名规范
-             */
             bool IsValidUserId(const std::string& userId)
             {
                 static const std::regex kUserIdPattern("^[A-Z]{2,6}[A-Z][0-9]+$");
@@ -47,59 +27,52 @@ namespace camera
 
         CoreResult CameraLayout::SetDimensions(int rows, int cols)
         {
-            // 限制布局尺寸在合理范围内，防止内存过度分配
-            if (rows < 1 || cols < 1 || rows > 10 || cols > 10)
+            if (rows < kMinLayoutDimension || cols < kMinLayoutDimension || rows > kMaxLayoutDimension || cols > kMaxLayoutDimension)
             {
-                return CoreResult::Failure(CoreErrorCode::kInvalidArgument, "layout dimensions must be within [1, 10]");
+                return CoreResult::Failure(CoreErrorCode::kInvalidArgument,
+                    "layout dimensions must be within [" + std::to_string(kMinLayoutDimension) + ", " + std::to_string(kMaxLayoutDimension) + "]");
             }
 
-            rows_ = rows;
-            cols_ = cols;
-            // 清空已有数据，重新初始化布局
-            slots_.clear();
-            idToIndex_.clear();
-            positionToIndex_.clear();
+            m_rows = rows;
+            m_cols = cols;
+            m_slots.clear();
+            m_idToIndex.clear();
+            m_positionToIndex.clear();
             return CoreResult::Success();
         }
 
         CoreResult CameraLayout::AddCamera(const CameraSlot& slot)
         {
-            // 必须先设置布局尺寸才能添加相机
-            if (rows_ == 0 || cols_ == 0)
+            if (m_rows == 0 || m_cols == 0)
             {
                 return CoreResult::Failure(CoreErrorCode::kInvalidArgument, "layout dimensions must be set before AddCamera");
             }
 
-            // 检查相机位置是否在有效范围内
             if (!IsInBounds(slot.row, slot.col))
             {
                 return CoreResult::Failure(CoreErrorCode::kInvalidArgument, "camera position is out of bounds");
             }
 
-            // 验证 userId 命名规范
             if (!IsValidUserId(slot.userId))
             {
                 return CoreResult::Failure(CoreErrorCode::kInvalidArgument, "userId does not match naming rule");
             }
 
-            // 检查 userId 是否已存在（唯一性约束）
-            if (idToIndex_.find(slot.userId) != idToIndex_.end())
+            if (m_idToIndex.find(slot.userId) != m_idToIndex.end())
             {
                 return CoreResult::Failure(CoreErrorCode::kAlreadyExists, "duplicated userId");
             }
 
-            // 检查位置是否已被占用（唯一性约束）
             const long long key = PositionKey(slot.row, slot.col);
-            if (positionToIndex_.find(key) != positionToIndex_.end())
+            if (m_positionToIndex.find(key) != m_positionToIndex.end())
             {
                 return CoreResult::Failure(CoreErrorCode::kAlreadyExists, "duplicated position");
             }
 
-            // 添加相机到布局，维护三个索引结构
-            const std::size_t index = slots_.size();
-            slots_.push_back(slot);                    // 存储相机信息
-            idToIndex_.emplace(slot.userId, index);    // userId -> 索引映射
-            positionToIndex_.emplace(key, index);      // 位置 -> 索引映射
+            const std::size_t index = m_slots.size();
+            m_slots.push_back(slot);
+            m_idToIndex.emplace(slot.userId, index);
+            m_positionToIndex.emplace(key, index);
             return CoreResult::Success();
         }
 
@@ -110,14 +83,13 @@ namespace camera
                 return CoreResult::Failure(CoreErrorCode::kInvalidArgument, "outUserId is null");
             }
 
-            // 通过位置键值查找对应的 userId
-            const auto it = positionToIndex_.find(PositionKey(row, col));
-            if (it == positionToIndex_.end())
+            const auto it = m_positionToIndex.find(PositionKey(row, col));
+            if (it == m_positionToIndex.end())
             {
                 return CoreResult::Failure(CoreErrorCode::kNotFound, "position not found");
             }
 
-            *outUserId = slots_[it->second].userId;
+            *outUserId = m_slots[it->second].userId;
             return CoreResult::Success();
         }
 
@@ -128,14 +100,13 @@ namespace camera
                 return CoreResult::Failure(CoreErrorCode::kInvalidArgument, "output pointer is null");
             }
 
-            // 通过 userId 查找对应的位置
-            const auto it = idToIndex_.find(userId);
-            if (it == idToIndex_.end())
+            const auto it = m_idToIndex.find(userId);
+            if (it == m_idToIndex.end())
             {
                 return CoreResult::Failure(CoreErrorCode::kNotFound, "userId not found");
             }
 
-            const CameraSlot& slot = slots_[it->second];
+            const CameraSlot& slot = m_slots[it->second];
             *outRow = slot.row;
             *outCol = slot.col;
             return CoreResult::Success();
@@ -143,7 +114,7 @@ namespace camera
 
         bool CameraLayout::IsInBounds(int row, int col) const
         {
-            return row >= 0 && col >= 0 && row < rows_ && col < cols_;
+            return row >= 0 && col >= 0 && row < m_rows && col < m_cols;
         }
 
     } // namespace core

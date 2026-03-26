@@ -25,11 +25,11 @@ namespace camera
             void Start(FrameCallback callback, std::chrono::milliseconds period)
             {
                 Stop();
-                running_.store(true);
-                worker_ = std::thread(
+                m_running.store(true);
+                m_worker = std::thread(
                     [this, callback, period]()
                     {
-                        while (running_.load())
+                        while (m_running.load())
                         {
                             if (callback)
                             {
@@ -42,16 +42,16 @@ namespace camera
 
             void Stop()
             {
-                running_.store(false);
-                if (worker_.joinable())
+                m_running.store(false);
+                if (m_worker.joinable())
                 {
-                    worker_.join();
+                    m_worker.join();
                 }
             }
 
         private:
-            std::atomic<bool> running_{ false };
-            std::thread worker_;
+            std::atomic<bool> m_running{ false };
+            std::thread m_worker;
         };
 
     } // namespace plugin_null

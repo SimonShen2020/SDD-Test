@@ -23,7 +23,7 @@ namespace camera
             virtual CoreResult DoShutdown() = 0;
 
         private:
-            std::atomic<bool> initialized_{ false };
+            std::atomic<bool> m_initialized{ false };
         };
 
     } // namespace core

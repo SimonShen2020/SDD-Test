@@ -8,6 +8,12 @@ namespace camera
     namespace plugin_huarui
     {
 
+        // 模拟图像尺寸常量
+        constexpr int kHuaruiSimulatedWidth = 4;
+        constexpr int kHuaruiSimulatedHeight = 4;
+        constexpr int kHuaruiSimulatedPixelCount = kHuaruiSimulatedWidth * kHuaruiSimulatedHeight;
+        constexpr std::uint8_t kHuaruiSimulatedPixelValue = 128;
+
         class HuaruiSdkAdapter
         {
         public:

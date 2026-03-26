@@ -12,6 +12,11 @@ namespace camera
     namespace plugin_null
     {
 
+        // 模拟相机图像尺寸常量
+        constexpr int kNullCameraWidth = 8;
+        constexpr int kNullCameraHeight = 8;
+        constexpr int kNullCameraPixelMaxValue = 255;
+
         class NullCamera final : public core::CameraBase
         {
         public:
@@ -26,9 +31,9 @@ namespace camera
             core::CoreResult DoInitialize() override;
             core::CoreResult DoShutdown() override;
 
-            mutable std::mutex mutex_;
-            std::unordered_map<std::string, std::string> parameters_;
-            std::atomic<unsigned int> frameCounter_{ 0 };
+            mutable std::mutex m_mutex;
+            std::unordered_map<std::string, std::string> m_parameters;
+            std::atomic<unsigned int> m_frameCounter{ 0 };
         };
 
     } // namespace plugin_null

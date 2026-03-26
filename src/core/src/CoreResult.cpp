@@ -43,8 +43,8 @@ namespace camera
                 return;
             }
 
-            camera::common::WriteLogLine(
-                "ERROR", context + " code=" + ToString(result.code) + " vendorCode=" + std::to_string(result.vendorCode) + " message=" + result.message);
+            CAMERA_LOG_ERROR(
+                context + " code=" + ToString(result.code) + " vendorCode=" + std::to_string(result.vendorCode) + " message=" + result.message);
         }
 
     } // namespace core

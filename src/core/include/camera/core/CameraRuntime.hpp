@@ -19,7 +19,7 @@ namespace camera
             CoreResult CreateCamera(const std::string& vendorType, std::shared_ptr<ICamera>* outCamera) const;
 
         private:
-            std::size_t loadedPlugins_ = 0;
+            std::size_t m_loadedPlugins = 0;
         };
 
     } // namespace core

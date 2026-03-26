@@ -27,8 +27,8 @@ namespace camera
         private:
             CameraFactory() = default;
 
-            mutable std::mutex mutex_;
-            std::unordered_map<std::string, CameraCreator> creators_;
+            mutable std::mutex m_mutex;
+            std::unordered_map<std::string, CameraCreator> m_creators;
         };
 
     } // namespace core

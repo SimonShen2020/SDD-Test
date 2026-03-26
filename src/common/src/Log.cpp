@@ -11,42 +11,39 @@
 #include <mutex>
 #include <sstream>
 
-namespace camera
+namespace camera::common
 {
-    namespace common
+
+    namespace
     {
-
-        namespace
+        std::mutex& LogMutex()
         {
-            std::mutex& LogMutex()
-            {
-                static std::mutex mutex;
-                return mutex;
-            }
-        } // namespace
+            static std::mutex mutex;
+            return mutex;
+        }
+    } // namespace
 
-        void WriteLogLine(const std::string& level, const std::string& message)
+    void WriteLogLine(const std::string& level, const std::string& message)
+    {
+        std::lock_guard<std::mutex> lock(LogMutex());
+
+        std::ofstream logFile("camera.log", std::ios::app);
+        if (!logFile.is_open())
         {
-            std::lock_guard<std::mutex> lock(LogMutex());
-
-            std::ofstream logFile("camera.log", std::ios::app);
-            if (!logFile.is_open())
-            {
-                return;
-            }
-
-            auto now = std::chrono::system_clock::now();
-            std::time_t nowTime = std::chrono::system_clock::to_time_t(now);
-
-            std::tm tmValue{};
-#if defined(_WIN32)
-            localtime_s(&tmValue, &nowTime);
-#else
-            localtime_r(&nowTime, &tmValue);
-#endif
-
-            logFile << std::put_time(&tmValue, "%Y-%m-%d %H:%M:%S") << " [" << level << "] " << message << '\n';
+            return;
         }
 
-    } // namespace common
-} // namespace camera
+        auto now = std::chrono::system_clock::now();
+        std::time_t nowTime = std::chrono::system_clock::to_time_t(now);
+
+        std::tm tmValue{};
+#if defined(_WIN32)
+        localtime_s(&tmValue, &nowTime);
+#else
+        localtime_r(&nowTime, &tmValue);
+#endif
+
+        logFile << std::put_time(&tmValue, "%Y-%m-%d %H:%M:%S") << " [" << level << "] " << message << '\n';
+    }
+
+} // namespace camera::common

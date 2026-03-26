@@ -17,13 +17,13 @@ namespace camera
         void CameraMonitor::Start(const MonitorPolicy& policy, ProbeFn probe, ReconnectFn reconnect)
         {
             Stop();
-            reconnectAttempts_.store(0);
-            running_.store(true);
+            m_reconnectAttempts.store(0);
+            m_running.store(true);
 
-            worker_ = std::thread(
+            m_worker = std::thread(
                 [this, policy, probe, reconnect]()
                 {
-                    while (running_.load())
+                    while (m_running.load())
                     {
                         bool online = true;
                         if (probe)
@@ -34,10 +34,10 @@ namespace camera
                         if (!online)
                         {
                             int attempts = 0;
-                            while (running_.load() && attempts < policy.maxReconnectAttempts)
+                            while (m_running.load() && attempts < policy.maxReconnectAttempts)
                             {
                                 ++attempts;
-                                reconnectAttempts_.store(attempts);
+                                m_reconnectAttempts.store(attempts);
                                 if (reconnect && reconnect())
                                 {
                                     break;
@@ -53,10 +53,10 @@ namespace camera
 
         void CameraMonitor::Stop()
         {
-            running_.store(false);
-            if (worker_.joinable())
+            m_running.store(false);
+            if (m_worker.joinable())
             {
-                worker_.join();
+                m_worker.join();
             }
         }
 

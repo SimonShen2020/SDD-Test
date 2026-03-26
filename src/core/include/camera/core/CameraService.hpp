@@ -32,9 +32,9 @@ namespace camera
         private:
             CoreResult EnsureInitialized() const;
 
-            CameraRuntime runtime_;
-            std::vector<std::string> pluginPaths_;
-            bool initialized_ = false;
+            CameraRuntime m_runtime;
+            std::vector<std::string> m_pluginPaths;
+            bool m_initialized = false;
         };
 
     } // namespace core

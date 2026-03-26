@@ -12,6 +12,10 @@ namespace camera
     namespace core
     {
 
+        // 布局尺寸限制常量
+        constexpr int kMinLayoutDimension = 1;
+        constexpr int kMaxLayoutDimension = 10;
+
         struct CameraSlot
         {
             std::string userId;
@@ -31,29 +35,29 @@ namespace camera
 
             int rows() const
             {
-                return rows_;
+                return m_rows;
             }
             int cols() const
             {
-                return cols_;
+                return m_cols;
             }
             std::size_t cameraCount() const
             {
-                return slots_.size();
+                return m_slots.size();
             }
             const std::vector<CameraSlot>& slots() const
             {
-                return slots_;
+                return m_slots;
             }
 
         private:
             bool IsInBounds(int row, int col) const;
 
-            int rows_ = 0;
-            int cols_ = 0;
-            std::vector<CameraSlot> slots_;
-            std::unordered_map<std::string, std::size_t> idToIndex_;
-            std::unordered_map<long long, std::size_t> positionToIndex_;
+            int m_rows = 0;
+            int m_cols = 0;
+            std::vector<CameraSlot> m_slots;
+            std::unordered_map<std::string, std::size_t> m_idToIndex;
+            std::unordered_map<long long, std::size_t> m_positionToIndex;
         };
 
     } // namespace core

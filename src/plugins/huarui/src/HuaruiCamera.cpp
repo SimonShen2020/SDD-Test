@@ -11,7 +11,7 @@ namespace camera
 
         core::CoreResult HuaruiCamera::Capture(core::FrameData* outFrame)
         {
-            return adapter_.Capture(outFrame);
+            return m_adapter.Capture(outFrame);
         }
 
         core::CoreResult HuaruiCamera::SetParameter(const std::string& key, const std::string& value)
@@ -22,7 +22,7 @@ namespace camera
             }
             if (key == "exposure_mode")
             {
-                exposureMode_ = value;
+                m_exposureMode = value;
             }
             return core::CoreResult::Success();
         }
@@ -35,7 +35,7 @@ namespace camera
             }
             if (key == "exposure_mode")
             {
-                *outValue = exposureMode_;
+                *outValue = m_exposureMode;
                 return core::CoreResult::Success();
             }
             return core::CoreResult::Failure(core::CoreErrorCode::kNotFound, "parameter not found");
@@ -43,12 +43,12 @@ namespace camera
 
         core::CoreResult HuaruiCamera::DoInitialize()
         {
-            return adapter_.Initialize();
+            return m_adapter.Initialize();
         }
 
         core::CoreResult HuaruiCamera::DoShutdown()
         {
-            return adapter_.Shutdown();
+            return m_adapter.Shutdown();
         }
 
     } // namespace plugin_huarui

@@ -25,8 +25,8 @@ namespace camera
             core::CoreResult DoShutdown() override;
 
         private:
-            HuaruiSdkAdapter adapter_;
-            std::string exposureMode_ = "auto";
+            HuaruiSdkAdapter m_adapter;
+            std::string m_exposureMode = "auto";
         };
 
     } // namespace plugin_huarui

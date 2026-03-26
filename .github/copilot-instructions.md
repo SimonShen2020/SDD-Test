@@ -5,6 +5,9 @@
 - 当前仓库处于设计与规范阶段；在无明确要求时，优先更新文档与设计说明，不擅自生成大规模脚手架。
 - 变更遵循小步提交原则：仅修改与任务直接相关的文件，避免无关重构。
 - 公共接口注释保持契约化，说明输入输出、失败语义与线程安全假设。
+- C++ 类成员变量采用 `m_` member-prefix naming convention：统一使用 `m_` 前缀加 lowerCamelCase 命名，例如 `m_deviceId`、`m_frameBuffer`；禁止使用 trailing-underscore style，例如 `deviceId_`、`frameBuffer_`。
+- 全局变量统一使用 `g_` 前缀加 lowerCamelCase 命名，例如 `g_logLevel`、`g_defaultConfig`。
+- 静态成员变量统一使用 `s_` 前缀加 lowerCamelCase 命名，例如 `s_instanceCount`、`s_defaultSettings`。
 
 ## Architecture
 - 目标架构是 Core + Plugin 动态库模式：

@@ -15,7 +15,7 @@
 
 TEST(HuaruiPluginTest, CanLoadPluginAndFindRegisterEntry)
 {
-    std::filesystem::path pluginPath = std::filesystem::path(CAMERA_SOURCE_DIR) / "build" / "src" / "plugins" / "huarui" / "Debug" / "CameraHuarui.dll";
+    std::filesystem::path pluginPath = CAMERA_HUARUI_PLUGIN_PATH;
 
     if (!std::filesystem::exists(pluginPath))
     {

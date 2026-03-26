@@ -26,13 +26,13 @@ namespace camera
 
             int reconnectAttempts() const
             {
-                return reconnectAttempts_.load();
+                return m_reconnectAttempts.load();
             }
 
         private:
-            std::atomic<bool> running_{ false };
-            std::atomic<int> reconnectAttempts_{ 0 };
-            std::thread worker_;
+            std::atomic<bool> m_running{ false };
+            std::atomic<int> m_reconnectAttempts{ 0 };
+            std::thread m_worker;
         };
 
     } // namespace core

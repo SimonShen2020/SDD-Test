@@ -15,26 +15,26 @@ namespace camera
 
         void CameraService::SetPluginPaths(std::vector<std::string> pluginPaths)
         {
-            pluginPaths_ = std::move(pluginPaths);
+            m_pluginPaths = std::move(pluginPaths);
         }
 
         CoreResult CameraService::Initialize(const std::string& configPath)
         {
             (void)configPath;
 
-            CoreResult result = runtime_.InitializePlugins(pluginPaths_, kDefaultPluginRegisterSymbol);
+            CoreResult result = m_runtime.InitializePlugins(m_pluginPaths, kDefaultPluginRegisterSymbol);
             if (!result.ok())
             {
                 return result;
             }
 
-            initialized_ = true;
+            m_initialized = true;
             return CoreResult::Success();
         }
 
         CoreResult CameraService::Shutdown()
         {
-            initialized_ = false;
+            m_initialized = false;
             return CoreResult::Success();
         }
 
@@ -47,7 +47,7 @@ namespace camera
             }
 
             std::shared_ptr<ICamera> camera;
-            CoreResult createResult = runtime_.CreateCamera(userId, &camera);
+            CoreResult createResult = m_runtime.CreateCamera(userId, &camera);
             if (!createResult.ok())
             {
                 return createResult;
@@ -59,7 +59,7 @@ namespace camera
 
         CoreResult CameraService::EnsureInitialized() const
         {
-            if (!initialized_)
+            if (!m_initialized)
             {
                 return CoreResult::Failure(CoreErrorCode::kRuntimeError, "service is not initialized");
             }

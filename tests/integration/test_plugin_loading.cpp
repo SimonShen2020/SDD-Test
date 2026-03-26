@@ -29,7 +29,7 @@ TEST(PluginLoaderTest, FailsWhenPluginPathMissing)
 
 TEST(PluginLoaderTest, FailsWhenRegisterSymbolMissing)
 {
-    std::filesystem::path pluginPath = std::filesystem::path(CAMERA_SOURCE_DIR) / "build" / "src" / "plugins" / "null" / "Debug" / "CameraNull.dll";
+    std::filesystem::path pluginPath = CAMERA_NULL_PLUGIN_PATH;
     if (!std::filesystem::exists(pluginPath))
     {
         GTEST_SKIP() << "CAMERA_NULL_PLUGIN_PATH is not set";
